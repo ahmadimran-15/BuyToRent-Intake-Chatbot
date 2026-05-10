@@ -1,0 +1,144 @@
+{
+  "name": "MCP Server Buy to intake",
+  "nodes": [
+    {
+      "parameters": {
+        "toolDescription": "save data",
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/contacts/upsert",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer pit-7563c210-33d8-4588-840c-4c85b1f9e2e5"
+            },
+            {
+              "name": "Version",
+              "value": "2021-07-28"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('JSON', ``, 'json') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        -480,
+        336
+      ],
+      "id": "7d9a01cb-c885-4ffa-a3e2-db7054645cb5",
+      "name": "createContact"
+    },
+    {
+      "parameters": {
+        "path": "mcp_client"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2,
+      "position": [
+        -464,
+        64
+      ],
+      "id": "6b576bc6-8bba-4b2f-ad14-5ed94204db2e",
+      "name": "MCP Server Trigger1",
+      "webhookId": "a53ccfa8-40e9-4e95-a96a-c71724f10a98"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/opportunities/upsert",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer pit-7563c210-33d8-4588-840c-4c85b1f9e2e5"
+            },
+            {
+              "name": "Version",
+              "value": "2021-07-28"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "pipelineId",
+              "value": "oEVZ4wIAlrBtv7ABIudn"
+            },
+            {
+              "name": "locationId",
+              "value": "6yJc24xDFknMMfEZH9iB"
+            },
+            {
+              "name": "contactId",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', ``, 'string') }}"
+            },
+            {
+              "name": "stageId",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters3_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        -208,
+        320
+      ],
+      "id": "0e5dfc08-ac2c-4b13-ba73-a5fc9e8f7248",
+      "name": "createopportunity"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "createContact": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "createopportunity": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a397a0dd-cde3-4f1a-afa5-de81f8417158",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9db2e84de6d53b0f614a7695088890a92274f0aa1d6c6a85573fc4159be21043"
+  },
+  "id": "9db94QqSUcSW4W7V",
+  "tags": []
+}
