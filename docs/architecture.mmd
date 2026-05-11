@@ -1,0 +1,21 @@
+flowchart TD
+    User([Visitor on Website]) -->|opens chat widget| Chat[Chat Trigger<br/>When chat message received]
+    Chat --> Agent{{AI Agent<br/>Real-Estate Qualifier}}
+    LLM[OpenAI Chat Model<br/>o3] -.language model.-> Agent
+    Mem[(Simple Memory<br/>Buffer Window)] -.memory.-> Agent
+    MCPClient[MCP Client Tool<br/>mcp_client] -.tool.-> Agent
+
+    Agent -->|JSON-RPC over MCP| MCPServer[MCP Server Trigger<br/>path: /mcp_client]
+    MCPServer --> CC[createContact Tool<br/>HTTP Tool]
+    MCPServer --> CO[createopportunity Tool<br/>HTTP Tool]
+
+    CC -->|POST /contacts/upsert| GHL[(GoHighLevel CRM<br/>LeadConnector API)]
+    CO -->|POST /opportunities/upsert| GHL
+
+    subgraph Webhook_Pipeline[Webhook Scoring Pipeline]
+      WH[Webhook<br/>POST /chat-intake] --> Code[Code Node<br/>Lead Score + Tags + Stage]
+      Code --> Upsert[Upsert Contact<br/>HTTP Request]
+      Upsert -->|POST /contacts/upsert| GHL
+    end
+
+    User -.optional intake form.-> WH
